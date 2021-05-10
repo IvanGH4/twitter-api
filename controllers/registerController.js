@@ -1,17 +1,15 @@
 const bcrypt = require("bcryptjs");
 const { hashPassword } = require("../models/User");
 const User = require("../models/User");
-
+const jwt = require("jsonwebtoken");
 module.exports = {
-  index: function (req, res) {
-    res.render("register");
-  },
-
   store: async function (req, res) {
     const { firstName, lastName, userName, email, password } = req.body;
     const user = await User.findOne({ userName: userName });
     if (user) {
-      res.redirect("/bienvenido");
+      res.json({
+        error: "Upsss... you did it again",
+      });
     } else {
       try {
         const userSaved = await User.create({
@@ -22,13 +20,25 @@ module.exports = {
           password: await hashPassword(password),
         });
         console.log("Se registró el usuario");
-        req.login(userSaved, (err) => {
-          res.redirect("/");
+        let token = jwt.sign(
+          {
+            userName,
+            email,
+          },
+          process.env.SECRET_TEXT
+        );
+
+        res.json({
+          userId: userSaved._id,
+          userName: userSaved.userName,
+          token,
         });
       } catch (err) {
         // console.log(err.message);
         let error = err.message;
-        res.redirect(`/registro?${error}`);
+        res.status(400).json({
+          error,
+        });
       }
     }
   },

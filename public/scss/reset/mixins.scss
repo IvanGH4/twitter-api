@@ -1,7 +1,0 @@
-@mixin flexible( $a, $b, $c, $d, $e ){
-	display: flex;
-	flex-flow: $a $b;
-	justify-content: $c;
-	align-items: $d;
-	align-content: $e;
-}
