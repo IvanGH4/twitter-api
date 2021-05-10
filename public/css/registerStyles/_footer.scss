@@ -1,0 +1,36 @@
+footer {
+    padding: 18px 60px;
+    background-color: $dark-blue;
+    height: 15vh;
+    
+    .links {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+        a {
+            margin: 0px 10px;
+            color: $gray;
+            text-decoration: none;
+            font-size: 12px;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+        small {
+            color: $gray;
+            margin: 0 10px;
+        }
+    }
+}
+
+@media (max-width: 750px) {
+    footer {
+        height: 100%;
+        .links {
+            flex-wrap: wrap;
+            a, small {
+                margin: 10px;
+            }
+        } 
+    }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "twitter-clone",
+  "version": "1.0.0",
+  "description": "Twitter clone using MongoDB and Express",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IvanGH4/twitter-clone.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IvanGH4/twitter-clone/issues"
+  },
+  "homepage": "https://github.com/IvanGH4/twitter-clone#readme",
+  "dependencies": {
+    "@google-cloud/storage": "^5.8.4",
+    "aws-sdk": "^2.892.0",
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.6",
+    "email-validator": "^2.0.4",
+    "express": "^4.17.1",
+    "express-flash": "0.0.2",
+    "express-session": "^1.17.1",
+    "faker": "^5.5.3",
+    "firebase-admin": "^9.6.0",
+    "formidable": "^1.2.2",
+    "mongoose": "^5.12.5",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "uuid": "^8.3.2"
+  }
+}

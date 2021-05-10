@@ -1,0 +1,51 @@
+.left-side {
+    width: 50%;
+    background: $light-blue;
+    position: relative;
+    overflow: hidden;
+    @extend %generic-side;
+
+    .bg-logo {
+        position: absolute;
+        top: -30%;
+        left: 0%;
+        width: 950px;
+        fill: $blue;
+    }
+
+    .features {
+        display: flex;
+        align-items: center;
+        position: relative;
+        z-index: 100;
+
+        h3 {
+            font-weight: 800;
+            font-size: 20px;
+        }
+
+        &:not(:last-child) {
+            margin-bottom: 40px;
+        }
+
+        svg {
+            width: 28px;
+            fill: #fff;
+            margin-right: 20px;
+        }
+    }
+}
+
+@media (max-width: 750px) {
+    .left-side {
+        width: 100%;
+        padding: 10px;
+
+        .bg-logo {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+        }
+    }
+}
