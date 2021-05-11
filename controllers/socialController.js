@@ -50,49 +50,61 @@ module.exports = {
   },
 
   follow: async function (req, res) {
-    const { id } = req.params;
+    const { id } = req.body;
     const userToFollow = await User.findById(id).select("followers");
 
     if (
       userToFollow.followers.some((follower) =>
-        follower._id.equals(req.user._id)
+        follower._id.equals(req.payload.userId)
       )
     ) {
       console.log("Ya estas siguiendo a este user.");
-      console.log(req.user._id);
+      console.log(req.payload.userId);
       await User.updateOne(
         { _id: id },
         {
           $pull: {
-            followers: { $in: [req.user._id] },
+            followers: { $in: [req.payload.userId] },
           },
         }
       );
       await User.updateOne(
-        { _id: req.user._id },
+        { _id: req.payload.userId },
         {
           $pull: {
             following: { $in: [id] },
           },
         }
       );
-      res.redirect("back");
+      res.json({
+        ok: true,
+        message: "Dejó de seguir a este usuario",
+      });
     } else {
-      await User.updateOne({ _id: id }, { $push: { followers: req.user._id } });
+      await User.updateOne(
+        { _id: id },
+        { $push: { followers: req.payload.userId } }
+      );
       console.log("Ok uno");
-      await User.updateOne({ _id: req.user._id }, { $push: { following: id } });
+      await User.updateOne(
+        { _id: req.payload.userId },
+        { $push: { following: id } }
+      );
       console.log("Ok Dos");
-      res.redirect("back");
+      res.json({
+        ok: true,
+        message: "Comenzó a seguir a este usuario",
+      });
     }
   },
 
   like: async function (req, res) {
-    const { id } = req.params;
+    const { id } = req.body;
     const likesOftweetBeeingLiked = await Tweet.findById(id).select("likes");
 
     if (
       likesOftweetBeeingLiked.likes.some((like) =>
-        like._id.equals(req.user._id)
+        like._id.equals(req.payload.userId)
       )
     ) {
       console.log("Ya le diste like a este tweet.");
@@ -101,35 +113,37 @@ module.exports = {
         { _id: id },
         {
           $pull: {
-            likes: { $in: [req.user._id] },
+            likes: { $in: [req.payload.userId] },
           },
         }
       );
       await User.updateOne(
-        { _id: req.user._id },
+        { _id: req.payload.userId },
         {
           $pull: {
             liked: { $in: [id] },
           },
         }
       );
-      res.redirect("back");
+      res.json({
+        ok: true,
+        message: "Esto ya no te gusta",
+      });
     } else {
-      await Tweet.updateOne({ _id: id }, { $push: { likes: req.user._id } });
+      await Tweet.updateOne(
+        { _id: id },
+        { $push: { likes: req.payload.userId } }
+      );
       console.log("Ok uno");
-      await User.updateOne({ _id: req.user._id }, { $push: { liked: id } });
+      await User.updateOne(
+        { _id: req.payload.userId },
+        { $push: { liked: id } }
+      );
       console.log("Ok Dos");
-      res.redirect("back");
-    }
-  },
-
-  searchUser: async function (req, res) {
-    let { username } = req.body;
-    const user = await User.findOne({ userName: username });
-    if (user) {
-      res.redirect(`/usuario/${user.userName}`);
-    } else {
-      res.redirect("back");
+      res.json({
+        ok: true,
+        message: "Esto te gusta",
+      });
     }
   },
 };

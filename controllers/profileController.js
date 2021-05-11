@@ -6,13 +6,14 @@ const User = require("../models/User");
 
 module.exports = {
   show: async function (req, res) {
-    let { username } = req.params;
+    let { username } = req.body;
     const user = await User.findOne({ userName: username })
       .populate({ path: "tweets", options: { sort: { createdAt: "desc" } } })
       .populate("followers")
-      .populate("following")
-      .limit(5);
-    res.render("profile", { user, loggedInUser: req.user });
+      .populate("following");
+    res.json({
+      user,
+    });
   },
 
   update: async function (req, res) {
@@ -21,6 +22,7 @@ module.exports = {
       keepExtensions: true,
     });
     form.parse(req, async (err, fields, files) => {
+      console.log(files);
       const ext = path.extname(files.image.path);
       const newFileName = `image_${Date.now()}${ext}`;
 
@@ -35,7 +37,7 @@ module.exports = {
       console.log(data.Location);
       const { firstName, lastName, bio } = fields;
       await User.updateOne(
-        { userName: req.user.userName },
+        { userName: req.payload.userName },
         {
           firstName,
           lastName,
@@ -43,7 +45,9 @@ module.exports = {
           profilePicture: data.Location,
         }
       );
-      res.redirect("back");
+      res.json({
+        ok: true,
+      });
     });
   },
 };
