@@ -37,7 +37,7 @@ module.exports = {
           },
         }
       );
-      await Tweet.remove({ _id: id });
+      await Tweet.deleteOne({ _id: id });
       res.json({
         ok: true,
       });

@@ -10,6 +10,10 @@ router.post("/register", registerController.store);
 router.post("/login", loginController.login);
 
 router.post("/create-tweet", checkToken, socialController.store);
-router.delete("/delete-tweet", [checkToken], socialController.destroy);
+router.delete(
+  "/delete-tweet",
+  [checkToken, checkAuthor],
+  socialController.destroy
+);
 
 module.exports = router;

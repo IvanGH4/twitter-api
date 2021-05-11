@@ -3,11 +3,14 @@ async function checkAuthor(req, res, next) {
   let { id } = req.body;
   const tweet = await Tweet.findById(id);
 
-  if (req.payload.equals(tweet.user)) {
+  // console.log(typeof tweet.user._id);
+  // console.log(typeof req.payload.userId);
+
+  if (req.payload.userId === tweet.user.toString()) {
     next();
   } else {
-    res.status(401).json({
-      error: "No se pudo eliminar el tweet.",
+    res.json({
+      ok: false,
     });
   }
 }
