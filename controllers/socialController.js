@@ -27,7 +27,7 @@ module.exports = {
 
   destroy: async function (req, res) {
     try {
-      const { id } = req.params;
+      const { id } = req.body;
       const tweetWithUserInside = await Tweet.findById(id).populate("user");
       await User.updateOne(
         { _id: tweetWithUserInside.user._id },
@@ -38,10 +38,14 @@ module.exports = {
         }
       );
       await Tweet.remove({ _id: id });
-      res.redirect("back");
+      res.json({
+        ok: true,
+      });
     } catch (err) {
       console.log(err);
-      res.redirect("/?Sucedio_un_errorS!!");
+      res.status(400).json({
+        error: "No se pudo eliminar el tweet.",
+      });
     }
   },
 

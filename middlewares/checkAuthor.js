@@ -1,10 +1,14 @@
 const Tweet = require("../models/Tweet");
 async function checkAuthor(req, res, next) {
-  const tweet = await Tweet.findById(req.params.id);
-  if (req.user._id.equals(tweet.user)) {
+  let { id } = req.body;
+  const tweet = await Tweet.findById(id);
+
+  if (req.payload.equals(tweet.user)) {
     next();
   } else {
-    res.redirect("/?Sucedio_un_errorW!!");
+    res.status(401).json({
+      error: "No se pudo eliminar el tweet.",
+    });
   }
 }
 
