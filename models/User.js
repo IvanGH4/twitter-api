@@ -20,6 +20,12 @@ const userSchema = new Schema(
     email: {
       type: String,
       required: [true, "El email es requerido"],
+      validate: {
+        validator: function (email) {
+          return /^\S+@\S+\.\S+$/.test(email);
+        },
+        message: (props) => `${props.value}_no_es_un_email_valido.`,
+      },
     },
     password: String,
     description: String,
