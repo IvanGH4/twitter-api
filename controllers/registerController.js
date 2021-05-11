@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const { hashPassword } = require("../models/User");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+
 module.exports = {
   store: async function (req, res) {
     const { firstName, lastName, userName, email, password } = req.body;
@@ -24,17 +25,16 @@ module.exports = {
           {
             userName,
             email,
+            userId: userSaved._id,
           },
           process.env.SECRET_TEXT
         );
-
         res.json({
           userId: userSaved._id,
           userName: userSaved.userName,
           token,
         });
       } catch (err) {
-        // console.log(err.message);
         let error = err.message;
         res.status(400).json({
           error,

@@ -3,20 +3,25 @@ const User = require("../models/User");
 
 module.exports = {
   store: async function (req, res) {
+    // console.log(req.payload);
     const { text } = req.body;
     if (text.length > 2 && text.length < 141) {
-      const tweet = await Tweet.create({ text, user: req.user });
+      const tweet = await Tweet.create({ text, user: req.payload.userId });
       await User.updateOne(
-        { _id: req.user._id },
+        { _id: req.payload.userId },
         {
           $push: {
             tweets: { _id: tweet._id },
           },
         }
       );
-      res.redirect("/");
+      res.json({
+        ok: true,
+      });
     } else {
-      res.redirect("/?Sucedio_un_errorA!!");
+      res.status(400).json({
+        error: "No se pudo crear el tweet. Intente nuevamente.",
+      });
     }
   },
 
