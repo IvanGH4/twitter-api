@@ -10,7 +10,7 @@ module.exports = {
   },
 
   indexUsers: async function (req, res) {
-    const users = await User.find({ _id: { $ne: req.payload.userId } })
+    const users = await User.find({ _id: { $ne: req.user.userId } })
       .limit(7)
       .sort({ createdAt: "desc" });
     res.json({
@@ -19,9 +19,9 @@ module.exports = {
   },
 
   indexTweets: async function (req, res) {
-    const user = await User.findById(req.payload.userId).select("following");
+    const user = await User.findById(req.user.userId).select("following");
     const tweets = await Tweet.find({
-      user: { $in: [...user.following, req.payload.userId] },
+      user: { $in: [...user.following, req.user.userId] },
     })
       .populate("user")
       .sort({ createdAt: "desc" });

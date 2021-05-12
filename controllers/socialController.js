@@ -3,12 +3,12 @@ const User = require("../models/User");
 
 module.exports = {
   store: async function (req, res) {
-    // console.log(req.payload);
+    // console.log(req.user);
     const { text } = req.body;
     if (text.length > 2 && text.length < 141) {
-      const tweet = await Tweet.create({ text, user: req.payload.userId });
+      const tweet = await Tweet.create({ text, user: req.user.userId });
       await User.updateOne(
-        { _id: req.payload.userId },
+        { _id: req.user.userId },
         {
           $push: {
             tweets: { _id: tweet._id },
@@ -55,21 +55,21 @@ module.exports = {
 
     if (
       userToFollow.followers.some((follower) =>
-        follower._id.equals(req.payload.userId)
+        follower._id.equals(req.user.userId)
       )
     ) {
       console.log("Ya estas siguiendo a este user.");
-      console.log(req.payload.userId);
+      console.log(req.user.userId);
       await User.updateOne(
         { _id: id },
         {
           $pull: {
-            followers: { $in: [req.payload.userId] },
+            followers: { $in: [req.user.userId] },
           },
         }
       );
       await User.updateOne(
-        { _id: req.payload.userId },
+        { _id: req.user.userId },
         {
           $pull: {
             following: { $in: [id] },
@@ -83,11 +83,11 @@ module.exports = {
     } else {
       await User.updateOne(
         { _id: id },
-        { $push: { followers: req.payload.userId } }
+        { $push: { followers: req.user.userId } }
       );
       console.log("Ok uno");
       await User.updateOne(
-        { _id: req.payload.userId },
+        { _id: req.user.userId },
         { $push: { following: id } }
       );
       console.log("Ok Dos");
@@ -104,7 +104,7 @@ module.exports = {
 
     if (
       likesOftweetBeeingLiked.likes.some((like) =>
-        like._id.equals(req.payload.userId)
+        like._id.equals(req.user.userId)
       )
     ) {
       console.log("Ya le diste like a este tweet.");
@@ -113,12 +113,12 @@ module.exports = {
         { _id: id },
         {
           $pull: {
-            likes: { $in: [req.payload.userId] },
+            likes: { $in: [req.user.userId] },
           },
         }
       );
       await User.updateOne(
-        { _id: req.payload.userId },
+        { _id: req.user.userId },
         {
           $pull: {
             liked: { $in: [id] },
@@ -130,15 +130,9 @@ module.exports = {
         message: "Esto ya no te gusta",
       });
     } else {
-      await Tweet.updateOne(
-        { _id: id },
-        { $push: { likes: req.payload.userId } }
-      );
+      await Tweet.updateOne({ _id: id }, { $push: { likes: req.user.userId } });
       console.log("Ok uno");
-      await User.updateOne(
-        { _id: req.payload.userId },
-        { $push: { liked: id } }
-      );
+      await User.updateOne({ _id: req.user.userId }, { $push: { liked: id } });
       console.log("Ok Dos");
       res.json({
         ok: true,
