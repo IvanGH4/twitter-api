@@ -11,7 +11,7 @@ const profileController = require("../controllers/profileController");
 router.get("/index-tweets", [checkToken], homeController.indexTweets);
 router.get("/index-users", [checkToken], homeController.indexUsers);
 router.get("/index", [checkToken], homeController.index);
-router.get("/index-user", [checkToken], profileController.show);
+router.get("/index-user", [checkToken], profileController.show); // a los get no se les puede pasar body, con axios se le setea la info por params y se recibe en query.
 
 router.post("/register", registerController.store);
 router.post("/login", loginController.login);

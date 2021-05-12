@@ -6,7 +6,7 @@ const User = require("../models/User");
 
 module.exports = {
   show: async function (req, res) {
-    let { username } = req.body;
+    let { username } = req.query;
     const user = await User.findOne({ userName: username })
       .populate({ path: "tweets", options: { sort: { createdAt: "desc" } } })
       .populate("followers")
