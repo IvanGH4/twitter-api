@@ -15,8 +15,8 @@ module.exports = {
           },
         }
       );
-      console.log(tweet);
       res.json({
+        // hay que popularlo con el user
         tweet,
       });
     } else {
