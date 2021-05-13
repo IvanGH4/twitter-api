@@ -3,7 +3,6 @@ const User = require("../models/User");
 
 module.exports = {
   store: async function (req, res) {
-    // console.log(req.user);
     const { text } = req.body;
     if (text.length > 2 && text.length < 141) {
       const tweet = await Tweet.create({ text, user: req.user.userId });
@@ -15,9 +14,9 @@ module.exports = {
           },
         }
       );
+      const createdTweet = await Tweet.findById(tweet._id).populate("user");
       res.json({
-        // hay que popularlo con el user
-        tweet,
+        tweet: createdTweet,
       });
     } else {
       res.status(400).json({
