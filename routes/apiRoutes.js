@@ -22,7 +22,7 @@ router.get("/users/profile", profileController.show); // a los get no se les pue
 
 router.post("/tweets", socialController.store);
 
-router.delete("/tweets", [checkAuthor], socialController.destroy);
+router.delete("/tweets", checkAuthor, socialController.destroy);
 
 router.patch("/users", socialController.follow);
 router.patch("/tweets", socialController.like);

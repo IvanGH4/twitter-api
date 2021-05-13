@@ -6,7 +6,7 @@ async function checkAuthor(req, res, next) {
   // console.log(typeof tweet.user._id);
   // console.log(typeof req.payload.userId);
 
-  if (req.payload.userId === tweet.user.toString()) {
+  if (req.user.userId === tweet.user.toString()) {
     next();
   } else {
     res.json({
