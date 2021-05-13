@@ -15,8 +15,9 @@ module.exports = {
           },
         }
       );
+      console.log(tweet);
       res.json({
-        ok: true,
+        tweet,
       });
     } else {
       res.status(400).json({
