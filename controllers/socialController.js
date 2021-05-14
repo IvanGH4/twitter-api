@@ -5,7 +5,7 @@ module.exports = {
   store: async function (req, res) {
     const { text } = req.body;
     if (text.length > 2 && text.length < 141) {
-      const tweet = await Tweet.create({ text, user: req.user.userId });
+      let tweet = await Tweet.create({ text, user: req.user.userId });
       await User.updateOne(
         { _id: req.user.userId },
         {
@@ -14,9 +14,10 @@ module.exports = {
           },
         }
       );
-      const createdTweet = await Tweet.findById(tweet._id).populate("user");
+      // const createdTweet = await Tweet.findById(tweet._id).populate("user");
+      tweet = await tweet.populate("user").execPopulate();
       res.json({
-        tweet: createdTweet,
+        tweet: tweet,
       });
     } else {
       res.status(400).json({
