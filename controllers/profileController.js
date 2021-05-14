@@ -37,7 +37,7 @@ module.exports = {
       console.log(data.Location);
       const { firstName, lastName, bio } = fields;
       await User.updateOne(
-        { userName: req.payload.userName },
+        { userName: req.user.userName },
         {
           firstName,
           lastName,

@@ -19,6 +19,7 @@ router.get("/tweets", homeController.indexTweets);
 router.get("/users", homeController.indexUsers);
 router.get("/index", homeController.index);
 router.get("/users/profile", profileController.show); // a los get no se les puede pasar body, con axios se le setea la info por params y se recibe en query.
+router.get("/users/profile/tweets", homeController.indexUser);
 
 router.post("/tweets", socialController.store);
 

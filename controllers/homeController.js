@@ -10,9 +10,7 @@ module.exports = {
   },
 
   indexUsers: async function (req, res) {
-    const users = await User.find({ _id: { $ne: req.user.userId } })
-      .limit(7)
-      .sort({ createdAt: "desc" });
+    const users = await User.aggregate([{ $sample: { size: 7 } }]);
     res.json({
       users,
     });
@@ -26,6 +24,16 @@ module.exports = {
       .populate("user")
       .sort({ createdAt: "desc" });
     // console.log(tweets);
+    res.json({ tweets });
+  },
+
+  indexUser: async function (req, res) {
+    const { userId } = req.query;
+    const tweets = await Tweet.find({
+      user: userId,
+    })
+      .populate("user")
+      .sort({ createdAt: "desc" });
     res.json({ tweets });
   },
 };
