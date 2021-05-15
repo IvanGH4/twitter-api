@@ -141,4 +141,20 @@ module.exports = {
       });
     }
   },
+
+  comment: async function (req, res) {
+    let { author, text, tweetId } = req.body;
+    let comment = {
+      author,
+      text,
+    };
+    const commentCreated = await Tweet.updateOne(
+      { _id: tweetId },
+      { $push: { comments: comment } }
+    );
+    res.json({
+      ok: true,
+      comment: commentCreated,
+    });
+  },
 };

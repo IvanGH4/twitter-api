@@ -16,6 +16,12 @@ const tweetSchema = new Schema(
         ref: "User",
       },
     ],
+    comments: [
+      {
+        text: String,
+        author: String,
+      },
+    ],
   },
   { timestamps: true }
 );
